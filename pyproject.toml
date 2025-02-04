@@ -1,0 +1,33 @@
+[project]
+name = "movie-classifier"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "haison12",email = "36688293+haison12@users.noreply.github.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas (>=2.2.3,<3.0.0)",
+    "numpy (>=2.2.2,<3.0.0)",
+    "matplotlib (>=3.10.0,<4.0.0)",
+    "scikit-learn (>=1.6.1,<2.0.0)",
+    "scipy (>=1.15.1,<2.0.0)",
+    "cookiecutter (>=2.6.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3.4"
+pytest = "^8.3.4"
+ruff = "^0.9.4"
+isort = "^6.0.0"
+black = "^25.1.0"
+pre-commit = "^4.1.0"
+mypy = "^1.14.1"
+pdoc = "^15.0.1"
+
