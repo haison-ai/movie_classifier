@@ -3,6 +3,10 @@ Movie_classifier
 
 implementing classifier algoritmh based in naive bayes
 
+Workflow project
+
+![flujo_proyecto_de_datos](https://github.com/user-attachments/assets/cbf6938b-90f5-42c9-ad0e-08c91ce488e7)
+
 Project Organization
 ------------
 
