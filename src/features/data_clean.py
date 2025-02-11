@@ -4,7 +4,8 @@ import boto3
 import logging
 from io import BytesIO
 from src.features.load_rating import load_user_rating_data
-#from .data import loader_s3
+
+# from .data import loader_s3
 
 
 class DataCleans3:
@@ -20,13 +21,13 @@ class DataCleans3:
         try:
             csv = self.s3.get_object(Bucket=self.s3_name, Key="raw/ratings.dat")
             df = pd.read_csv(
-                BytesIO(csv["Body"].read()),  delimiter="::", engine="python"
+                BytesIO(csv["Body"].read()), delimiter="::", engine="python"
             )
             logging.info("file load successfully from s3")
             return df
 
         except Exception as e:
-            logging.error("Error to read file from s3: {e}")
+            logging.error(f"Error to read file from s3: {e}")
             return None
 
     def transform_data(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -34,9 +35,7 @@ class DataCleans3:
         print(df.head())
         n_users = df["user_id"].nunique()
         n_movies = df["movie_id"].nunique()
-        print(f"number of users: {n_users}, ",f"number of movies: {n_movies}")
-
-
+        print(f"number of users: {n_users}, ", f"number of movies: {n_movies}")
 
 
 if __name__ == "__main__":
