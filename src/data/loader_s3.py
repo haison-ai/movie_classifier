@@ -1,9 +1,8 @@
 import os
-
 import boto3
 
 
-class load_data:
+class LoadDatas3:
     def __init__(self, s3_name: str, s3_folder: str, region: str = "us-east-2"):
         """
         With this class gonna to upload the raw data in s3 bucket.
@@ -36,5 +35,5 @@ class load_data:
 
 
 if __name__ == "__main__":
-    uploading = load_data("movieclassifiers3", "raw")
-    uploading.load_s3("data/raw/users.dat")
+    upload = LoadDatas3("movieclassifiers3", "raw")
+    upload.load_s3("data/raw/users.dat")
