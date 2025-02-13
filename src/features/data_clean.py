@@ -6,8 +6,8 @@ import boto3
 import numpy as np
 import pandas as pd
 
-from src.features.load_rating import (count_samples, filter_target_movie,
-                                      get_rating_counts, load_user_rating_data)
+from src.features.load_rating import (count_ssamples, filter_target_movie,
+                                      get_rating_counts, load_uer_rating_data)
 
 
 class DataCleans3:
