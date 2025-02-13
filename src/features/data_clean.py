@@ -1,14 +1,13 @@
-import pandas as pd
-import numpy as np
-import boto3
 import logging
+import os
 from io import BytesIO
-from src.features.load_rating import (
-    load_user_rating_data,
-    get_rating_counts,
-    count_samples,
-    filter_target_movie
-)
+
+import boto3
+import numpy as np
+import pandas as pd
+
+from src.features.load_rating import (count_samples, filter_target_movie,
+                                      get_rating_counts, load_user_rating_data)
 
 
 class DataCleans3:
@@ -41,23 +40,21 @@ class DataCleans3:
 
         data, movie_id_mapping = load_user_rating_data(df, n_users, n_movies)
 
-
         values, counts = np.unique(data, return_counts=True)
 
         print("Distribución de ratings:")
         for value, count in zip(values, counts):
             print(f"Number of rating {value}: {count}")
 
-
         target_movie_id = df["movie_id"].value_counts().idxmax()
         print(f"Película con más ratings: {target_movie_id}")
 
-
         if target_movie_id not in movie_id_mapping:
-            raise ValueError(f"Error: La película {target_movie_id} no está en movie_id_mapping")
+            raise ValueError(
+                f"Error: La película {target_movie_id} no está en movie_id_mapping"
+            )
 
         X, Y = filter_target_movie(data, movie_id_mapping, target_movie_id)
-
 
         recommend_threshold = 3  # Ratings > 3 se consideran positivas
         Y_binary = np.copy(Y)  # Evitar modificar Y original
@@ -70,7 +67,32 @@ class DataCleans3:
 
         print(f"{n_pos} muestras positivas y {n_neg} muestras negativas.")
 
-        return X, Y_binary  # Devolvemos Y en formato binario
+        return pd.DataFrame(X), pd.DataFrame(
+            Y_binary, columns=["label"]
+        )  # Devolvemos Y en formato binario
+
+    def save_to_csv(self, df: pd.DataFrame, folder_path: str, filename: str) -> None:
+        """Guarda el DataFrame como un archivo CSV en una carpeta específica"""
+
+        # Especifica la ruta raíz de tu proyecto
+        root_dir = r"C:\Users\Haison\Documents\movie_classifier"
+        # Combina con la carpeta deseada
+        full_folder_path = os.path.join(root_dir, folder_path)
+
+        # Verifica si la carpeta existe
+        if not os.path.exists(full_folder_path):
+            # Si no existe, la crea
+            os.makedirs(full_folder_path, exist_ok=True)
+            logging.info(f"Carpeta creada: {full_folder_path}")
+        else:
+            logging.info(f"Carpeta existente: {full_folder_path}")
+
+        # Crea la ruta completa del archivo
+        full_path = os.path.join(full_folder_path, filename)
+
+        # Guarda el DataFrame como CSV en la ruta especificada
+        df.to_csv(full_path, index=False)
+        print(f"Archivo guardado localmente como {full_path}")
 
 
 # Ejecutar el código
@@ -78,4 +100,5 @@ if __name__ == "__main__":
     data = DataCleans3()
     datadf = data.read_s3_file("raw/ratings.dat")
     X, Y = data.transform_data(datadf)
-
+    data.save_to_csv(X, "data/processed/", filename="X.csv")
+    data.save_to_csv(Y, "data/processed/", filename="Y.csv")
