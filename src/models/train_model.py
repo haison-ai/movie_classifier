@@ -7,10 +7,10 @@ from sklearn.model_selection import train_test_split
 
 
 
-class train_model:
-    def __init__(self, model_path = "models/movie_classifier.pkl"):
+class TrainModel:
+    def __init__(self, model_path = "models/TrainModel.pkl"):
         self.model_path = model_path
-        self.model = MultinomialNB()
+        self.model = MultinomialNB(alpha=1.0, fit_prior=True)
 
     def load_data(self, X_path = r"C:\Users\Haison\Documents\movie_classifier\data\processed\X.csv", Y_path = r"C:\Users\Haison\Documents\movie_classifier\data\processed\Y.csv"):
         self.X = pd.read_csv(X_path)
@@ -25,8 +25,13 @@ class train_model:
         self.model.fit(self.X_train, self.Y_train)
 
     def save_model(self):
+        result = {
+            "model": self.model,
+            "X_test": self.X_test,
+            "Y_test": self.Y_test
+        }
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
-        joblib.dump(self.model, self.model_path)
+        joblib.dump(result,self.model_path)
 
     def run_pipeline(self):
         self.load_data()
@@ -36,5 +41,5 @@ class train_model:
 
 
 if __name__ == '__main__':
-    trainer = train_model()
+    trainer = TrainModel()
     trainer.run_pipeline()
