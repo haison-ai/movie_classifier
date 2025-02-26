@@ -1,7 +1,15 @@
-Movie_classifier
+Movie Recommendation System using Naive Bayes
 ==============================
 
-implementing classifier algoritmh based in naive bayes
+
+This personal project was created to implement the Naive Bayes algorithm in a movie recommendation system. It follows a professional project structure using tools like Cookiecutter for directory organization and Poetry for dependency management. Additionally, it incorporates best practices with tools such as Black, Ruff, and Mypy to ensure clean and maintainable code.
+
+The programming paradigm used in this project is Object-Oriented Programming (OOP) to maintain a modular and scalable structure.
+
+This is my first project, so there may be some mistakes, but I am continuously improving and will apply better practices in my future projects.
+
+Thank you for visiting my project! 🚀 
+
 
 Workflow project
 
