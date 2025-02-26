@@ -38,9 +38,10 @@ class DownloadDatas3:
         return None
 
 
-
+"""
 if __name__ == "__main__":
     download = DownloadDatas3()
     data = download.download_file(
         "movieclassifiers3", "data/processed", "raw/ratings.dat"
     )
+"""

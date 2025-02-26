@@ -5,7 +5,7 @@ import boto3
 class LoadDatas3:
     def __init__(self, s3_name: str, s3_folder: str, region: str = "us-east-2"):
         """
-        With this class gonna to upload the raw data in s3 bucket.
+        With this class going to upload the raw data in s3 bucket.
         """
         self.s3_name = s3_name
         self.s3_folder = s3_folder
@@ -19,7 +19,7 @@ class LoadDatas3:
             if not os.path.exists(local_path):
                 print(f" file doesn't exist in: {local_path}")
                 return False
-            # cleating client in s3
+
             file_name = os.path.basename(local_path)
             s3_path = f"{self.s3_folder}/{file_name}"
 
@@ -33,7 +33,8 @@ class LoadDatas3:
             print(f" Error to upload file: {e}")
             return False
 
-
+"""
 if __name__ == "__main__":
     upload = LoadDatas3("movieclassifiers3", "raw")
     upload.load_s3("data/raw/users.dat")
+"""

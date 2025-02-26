@@ -3,6 +3,7 @@ import pandas as pd
 import os
 
 class PredictModel:
+    """CLass to predict model already trained"""
     def __init__(self, model_load = "models/TrainModel.pkl", model_save = "models/PredictModel.pkl"):
         self.model_load = model_load
         self.model_save = model_save
@@ -42,7 +43,7 @@ class PredictModel:
         os.makedirs(os.path.dirname(self.model_save), exist_ok=True)
         joblib.dump(results, self.model_save)
 
-
+"""
 if __name__ == "__main__":
     predictor = PredictModel()
     prob = predictor.predict_proba()
@@ -52,6 +53,7 @@ if __name__ == "__main__":
     print(prob[0:10])
     print(pred[:10])
     print(f"The acurracy is around: {acur*100:.1f}%")
+"""
 
 
 

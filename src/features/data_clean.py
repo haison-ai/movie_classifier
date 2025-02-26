@@ -12,13 +12,13 @@ from src.features.load_rating import (count_ssamples, filter_target_movie,
 
 class DataCleans3:
     def __init__(self, s3_name="movieclassifiers3", region="us-east-2"):
-        """Inicia la conexión con AWS S3"""
+        """Start connection with s3"""
         self.s3_name = s3_name
         self.region = region
         self.s3 = boto3.client("s3", region_name=region)
 
     def read_s3_file(self, s3_route) -> pd.DataFrame:
-        """Lee el archivo de ratings desde S3 y lo carga en un DataFrame"""
+        """Read file from s3 and to convert into a pandas DataFrame"""
         try:
             csv = self.s3.get_object(Bucket=self.s3_name, Key=s3_route)
             df = pd.read_csv(
@@ -31,6 +31,7 @@ class DataCleans3:
             return None
 
     def transform_data(self, df: pd.DataFrame):
+        """Clean and transform data"""
         df.columns = ["user_id", "movie_id", "rating", "timestamp"]
         print(df.head())
 
@@ -72,7 +73,7 @@ class DataCleans3:
         )  # Devolvemos Y en formato binario
 
     def save_to_csv(self, df: pd.DataFrame, folder_path: str, filename: str) -> None:
-        """Guarda el DataFrame como un archivo CSV en una carpeta específica"""
+        """Save the file in CSV format"""
 
         # Especifica la ruta raíz de tu proyecto
         root_dir = r"C:\Users\Haison\Documents\movie_classifier"
@@ -95,10 +96,11 @@ class DataCleans3:
         print(f"Archivo guardado localmente como {full_path}")
 
 
-# Ejecutar el código
+"""
 if __name__ == "__main__":
     data = DataCleans3()
     datadf = data.read_s3_file("raw/ratings.dat")
     X, Y = data.transform_data(datadf)
     data.save_to_csv(X, "data/processed/", filename="X.csv")
     data.save_to_csv(Y, "data/processed/", filename="Y.csv")
+"""
