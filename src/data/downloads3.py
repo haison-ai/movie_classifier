@@ -5,15 +5,15 @@ import botocore.exceptions
 
 
 class DownloadDatas3:
-    "Class for downloading data from S3"
+    """Clase para descrgar los datos de s3"""
 
     def __init__(self, region: str = "us-east-2"):
-        "Start client with aws s3"
+        #Start client with aws s3
         self.region = region
         self.s3 = boto3.client("s3", region_name=self.region)
 
-    def download_file(self, s3_name: str, local_path: str, s3_key: str):
-        "Download file from s3 to local path"
+    def download_file(self, s3_name: str, local_path: str, s3_key: str) -> None:
+        """Este metodo descarga los datos desde s3"""
         try:
             file_name = os.path.basename(s3_key)
             local_file_path = os.path.join(local_path, file_name)
@@ -36,12 +36,3 @@ class DownloadDatas3:
             logging.error(f"Unexpected error: {e}")
 
         return None
-
-
-"""
-if __name__ == "__main__":
-    download = DownloadDatas3()
-    data = download.download_file(
-        "movieclassifiers3", "data/processed", "raw/ratings.dat"
-    )
-"""

@@ -4,16 +4,15 @@ import boto3
 
 class LoadDatas3:
     def __init__(self, s3_name: str, s3_folder: str, region: str = "us-east-2"):
-        """
-        With this class going to upload the raw data in s3 bucket.
-        """
+    #class for upload data into s3
+
         self.s3_name = s3_name
         self.s3_folder = s3_folder
         self.s3 = boto3.client("s3", region_name=region)
 
-    def load_s3(self, local_path: str):
+    def load_s3(self, local_path: str) -> str:
         """
-        Method to load the s3 bucket.
+        Este metodo carga los archivo en el bcuket de s3
         """
         try:
             if not os.path.exists(local_path):
@@ -25,7 +24,7 @@ class LoadDatas3:
 
             self.s3.upload_file(local_path, self.s3_name, s3_path)
             print(
-                f" files uploaded succesufully: {local_path} → s3://{self.s3_name}/{s3_path}"
+                f"files uploaded succesufully: {local_path} → s3://{self.s3_name}/{s3_path}"
             )
             return s3_path
 
@@ -33,8 +32,3 @@ class LoadDatas3:
             print(f" Error to upload file: {e}")
             return False
 
-"""
-if __name__ == "__main__":
-    upload = LoadDatas3("movieclassifiers3", "raw")
-    upload.load_s3("data/raw/users.dat")
-"""

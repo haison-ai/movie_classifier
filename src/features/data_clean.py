@@ -12,13 +12,13 @@ from src.features.load_rating import (count_ssamples, filter_target_movie,
 
 class DataCleans3:
     def __init__(self, s3_name="movieclassifiers3", region="us-east-2"):
-        """Start connection with s3"""
+        """Conectar con el bucket de s3"""
         self.s3_name = s3_name
         self.region = region
         self.s3 = boto3.client("s3", region_name=region)
 
     def read_s3_file(self, s3_route) -> pd.DataFrame:
-        """Read file from s3 and to convert into a pandas DataFrame"""
+        """Leer los archivos desde el bucket s3 y los convierte en un dataFrame"""
         try:
             csv = self.s3.get_object(Bucket=self.s3_name, Key=s3_route)
             df = pd.read_csv(
@@ -31,7 +31,7 @@ class DataCleans3:
             return None
 
     def transform_data(self, df: pd.DataFrame):
-        """Clean and transform data"""
+        #Clean and transform data
         df.columns = ["user_id", "movie_id", "rating", "timestamp"]
         print(df.head())
 
@@ -57,11 +57,11 @@ class DataCleans3:
 
         X, Y = filter_target_movie(data, movie_id_mapping, target_movie_id)
 
-        recommend_threshold = 3  # Ratings > 3 se consideran positivas
-        Y_binary = np.copy(Y)  # Evitar modificar Y original
+        recommend_threshold = 3  # Ratings > 3 es condiferado postivo
+        Y_binary = np.copy(Y)  # Evitar modificar el original
 
-        Y_binary[Y_binary <= recommend_threshold] = 0  # No recomendado
-        Y_binary[Y_binary > recommend_threshold] = 1  # Recomendado
+        Y_binary[Y_binary <= recommend_threshold] = 0  #false
+        Y_binary[Y_binary > recommend_threshold] = 1  #true
 
         n_pos = (Y_binary == 1).sum()
         n_neg = (Y_binary == 0).sum()
@@ -70,17 +70,17 @@ class DataCleans3:
 
         return pd.DataFrame(X), pd.DataFrame(
             Y_binary, columns=["label"]
-        )  # Devolvemos Y en formato binario
+        )  # Devulve en formato binario para clasficiar
 
     def save_to_csv(self, df: pd.DataFrame, folder_path: str, filename: str) -> None:
-        """Save the file in CSV format"""
+        #Guarda el archivo en formato CSV
 
-        # Especifica la ruta raíz de tu proyecto
+
         root_dir = r"C:\Users\Haison\Documents\movie_classifier"
-        # Combina con la carpeta deseada
+        #Combina con la carpeta deseada.
         full_folder_path = os.path.join(root_dir, folder_path)
 
-        # Verifica si la carpeta existe
+        # Verifica si la carpeta existe.
         if not os.path.exists(full_folder_path):
             # Si no existe, la crea
             os.makedirs(full_folder_path, exist_ok=True)
@@ -88,19 +88,11 @@ class DataCleans3:
         else:
             logging.info(f"Carpeta existente: {full_folder_path}")
 
-        # Crea la ruta completa del archivo
+        # Crea la ruta completa del archivo.
         full_path = os.path.join(full_folder_path, filename)
 
-        # Guarda el DataFrame como CSV en la ruta especificada
+        # Guarda el DataFrame como CSV en la ruta especificada.
         df.to_csv(full_path, index=False)
         print(f"Archivo guardado localmente como {full_path}")
 
 
-"""
-if __name__ == "__main__":
-    data = DataCleans3()
-    datadf = data.read_s3_file("raw/ratings.dat")
-    X, Y = data.transform_data(datadf)
-    data.save_to_csv(X, "data/processed/", filename="X.csv")
-    data.save_to_csv(Y, "data/processed/", filename="Y.csv")
-"""

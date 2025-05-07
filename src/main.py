@@ -4,22 +4,22 @@ from src.models.metrics_model import MetricsModel
 
 def main():
 
-    """ Train model and save with joblib the trained file """
-    print("🤖 Training model....")
+    "Train model and save with joblib the trained file "
+    print(" Training model....")
     model = TrainModel()
     model.run_pipeline()
 
-    """ Train model and save with joblib the trained file """
-    print("🤖 Predicting model....")
+    #Train model and save with joblib the trained file
+    print(" Predicting model....")
     predict = PredictModel()
     pred = predict.predict()
     predict.accuracy()
-    print(pred[:10])
+    print(pred)
 
 
-    print("🤖 Metrics model....")
+    print(" Metrics model....")
     metrics = MetricsModel()
-    metrics.metrics()
+    print(metrics.metrics())
     metrics.cross_val()
     metrics.matrix()
 

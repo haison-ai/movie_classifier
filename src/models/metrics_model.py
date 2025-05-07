@@ -3,6 +3,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import precision_score, recall_score, f1_score
 from sklearn.metrics import classification_report
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import roc_auc_score
 import seaborn as sns
@@ -12,14 +13,14 @@ import os
 import joblib
 
 class MetricsModel:
-    """Calculate metrics to measure fine and tunning the model"""
+    """Calculo de metricas y tunning del modelo"""
     def __init__(self, model_save = "models/PredictModel.pkl"):
         self.model_save = os.path.abspath(model_save)
         self.load_model()
         self.load_data()
 
     def load_data(self, X_path = r"C:\Users\Haison\Documents\movie_classifier\data\processed\X.csv", Y_path = r"C:\Users\Haison\Documents\movie_classifier\data\processed\Y.csv"):
-
+        """Carga los datos para realizar la metricas"""
         X_path = os.path.abspath(X_path)  # Convierte la ruta a absoluta
         Y_path = os.path.abspath(Y_path)
 
@@ -30,12 +31,17 @@ class MetricsModel:
         self.Y1 = pd.read_csv(Y_path).values.ravel()
 
     def load_model(self):
+        """Carga el modelo ya entrenado"""
         data = joblib.load(self.model_save)
         self.X_test = data["X_test"]
         self.Y_test = data["Y_test"]
         self.predictions = data["Predictions"]
+        self.predictions_proba = data["Predictions_proba"]
+
+
 
     def matrix(self):
+        """Devuelve una matriz de confusion"""
         matrix_confu = confusion_matrix(self.Y_test, self.predictions, labels=[0, 1])
         sns.heatmap(matrix_confu, annot=True, fmt='d', cmap='Blues', xticklabels=["Class 0",'Class 1'], yticklabels=["Class 0",'Class 1'])
         plt.xlabel("Predicted Class")
@@ -43,12 +49,17 @@ class MetricsModel:
         plt.title("Confusion Matrix")
         plt.show()
 
+
+
+
+
     def metrics(self):
         report = classification_report(self.Y_test, self.predictions)
         return precision_score(self.Y_test, self.predictions, labels=[0, 1]), recall_score(self.Y_test, self.predictions, labels=[0, 1]), f1_score(self.Y_test, self.predictions, labels=[0, 1])
 
 
     def cross_val(self):
+        """Realiza la validacion cruzada"""
         k = 5
         k_fold = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
         smoothing_factor_option = [1,2,3,4,5,6]
@@ -73,11 +84,10 @@ class MetricsModel:
 
 
 
-"""
+
 
 if __name__ == "__main__":
     metric = MetricsModel()
-    print(metric.matrix())
-    print(metric.metrics())
-    print(metric.cross_val())
-"""
+    metric.matrix()
+    metric.cross_val()
+    metric.metrics()
